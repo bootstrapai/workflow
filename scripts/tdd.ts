@@ -110,8 +110,8 @@ async function gatherRequirements(root: Agent) {
 
 function parseQuestions(input) {
     const lines = input.split("\n");
-    const questions = [];
-    let currentQuestion = null;
+    const questions: any[] = [];
+    let currentQuestion: any = null;
 
     for (const line of lines) {
         if (line.trim() === "") continue; // Skip empty lines
