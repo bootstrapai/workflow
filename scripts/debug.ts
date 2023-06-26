@@ -6,7 +6,7 @@ import { readFile, writeFile } from "fs/promises";
 import { prompt } from "./prompt";
 // import inquirer from "inquirer";
 dotenv.config();
-Agent.api = new APIQueue(process.env.API_KEY);
+Agent.api = new APIQueue(process.env.API_KEY!);
 
 const main = async () => {
     const { default: inquirer } = await dynamicImport("inquirer", module);
@@ -33,7 +33,6 @@ ${await readFile("./__tests__/index.ts")}
 ## Implementation
 ${await readFile("./src/index.ts")}
 `);
-        console.log(debug.messages);
 
         const failure = await prompt("please paste the failing test");
 

@@ -5,7 +5,7 @@ import { dynamicImport } from "tsimportlib";
 import { readFile, writeFile } from "fs/promises";
 // import inquirer from "inquirer";
 dotenv.config();
-Agent.api = new APIQueue(process.env.API_KEY);
+Agent.api = new APIQueue(process.env.API_KEY!);
 
 const QUESTIONER = `
 The user will give you a brief description of a piece of software and list of requirements. respond with a list of clarifying questions with the goal of discovering unstated requirements.
@@ -75,13 +75,14 @@ async function gatherRequirements(root: Agent) {
         );
         console.log(questions.content);
         const prompts = parseQuestions(questions.content);
-        const otherPrompts = [];
+        const otherPrompts: any[] = [];
         for (let i = 0; i < prompts.length; i++) {
             otherPrompts.push(prompts[i]);
             otherPrompts.push({
                 type: "input",
                 name: `other${i}`,
                 message: "Please specify your own answer:",
+                // @ts-ignore
                 when: (answers) => answers[prompts[i].name] === "other",
             });
         }

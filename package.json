@@ -2,9 +2,14 @@
     "name": "zergrush",
     "version": "0.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/index.d.ts",
     "scripts": {
-        "test": "jest"
+        "test": "jest",
+        "build": "npm run build:cjs && npm run build:esm",
+        "build:cjs": "tsc --emitDeclarationOnly && BABEL_ENV=commonjs babel src --out-dir dist/cjs --extensions '.ts,.tsx' --source-maps inline",
+        "build:esm": "tsc --emitDeclarationOnly && BABEL_ENV=esm babel src --out-dir dist/esm --extensions '.ts,.tsx' --source-maps inline"
     },
     "author": "",
     "license": "MIT",
@@ -15,6 +20,9 @@
         "readline": "^1.3.0"
     },
     "devDependencies": {
+        "@babel/cli": "^7.22.5",
+        "@babel/preset-env": "^7.22.5",
+        "@babel/preset-typescript": "^7.22.5",
         "@types/dotenv": "^8.2.0",
         "@types/inquirer": "^9.0.3",
         "@types/jest": "^29.5.2",
@@ -27,5 +35,11 @@
         "ts-node": "^10.9.1",
         "tsimportlib": "^0.0.5",
         "typescript": "^5.1.3"
+    },
+    "exports": {
+        ".": {
+            "import": "./dist/esm/index.js",
+            "require": "./dist/cjs/index.js"
+        }
     }
 }

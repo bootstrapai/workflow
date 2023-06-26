@@ -4,7 +4,7 @@ import Agent from "openai-queue/dist/agent";
 import * as dotenv from "dotenv";
 import { readFile } from "fs/promises";
 dotenv.config();
-Agent.api = new APIQueue(process.env.API_KEY);
+Agent.api = new APIQueue(process.env.API_KEY!);
 const STYLE = `
 ### Styleguide
 - use typescript

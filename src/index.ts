@@ -41,7 +41,7 @@ export class WorkflowDSL {
                         subscriber.next();
                         subscriber.complete();
                     } catch (error) {
-                        this.errorHandler(error, taskName);
+                        this.errorHandler(error as Error, taskName);
                         subscriber.complete(); // Change this line
                     }
                 };

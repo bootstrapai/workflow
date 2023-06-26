@@ -5,7 +5,7 @@ import { dynamicImport } from "tsimportlib";
 import { readFile, writeFile } from "fs/promises";
 // import inquirer from "inquirer";
 dotenv.config();
-Agent.api = new APIQueue(process.env.API_KEY);
+Agent.api = new APIQueue(process.env.API_KEY!);
 
 const TESTS = `
 The user will give you a brief description of a piece of software, a list of requirements, a usage example, and type definitions. 

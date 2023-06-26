@@ -1,0 +1,26 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false,
+        "targets": {
+          "node": "current"
+        }
+      }
+    ],
+    "@babel/preset-typescript"
+  ],
+  "env": {
+    "commonjs": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "modules": "commonjs"
+          }
+        ]
+      ]
+    }
+  }
+}

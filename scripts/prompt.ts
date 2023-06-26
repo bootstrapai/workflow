@@ -1,5 +1,5 @@
 export async function prompt(prompt): Promise<string> {
-    let inputLines = [];
+    let inputLines: string[] = [];
     let newlineCount = 0;
     let receivingInput = true;
 
