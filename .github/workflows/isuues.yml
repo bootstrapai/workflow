@@ -7,25 +7,27 @@ jobs:
     create_branch:
         runs-on: ubuntu-latest
         steps:
-            - name: Check out repository code
-              uses: actions/checkout@v2
-            - name: Create new branch
-              id: createbranch
+            - name: Checkout
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+            - name: Get branch name from labels
+              id: branch_name
               run: |
-                  LABEL_NAME=""
-                  if contains(github.event.issue.labels.*.name, 'bug')
-                  then
-                    LABEL_NAME='bug'
-                  elif contains(github.event.issue.labels.*.name, 'enhancement')
-                  then
-                    LABEL_NAME='enhancement'
-                  elif contains(github.event.issue.labels.*.name, 'documentation')
-                  then
-                    LABEL_NAME='documentation'
-                  else
-                    LABEL_NAME='issue'
-                  fi
+                  const labels = ${{ toJson(github.event.issue.labels.*.name) }};
+                  let branchName = 'issue';
+                  if (labels.includes('bug')) {
+                    branchName = 'bug';
+                  } else if (labels.includes('enhancement')) {
+                    branchName = 'enhancement';
+                  } else if (labels.includes('documentation')) {
+                    branchName = 'documentation';
+                  }
+                  console.log(`::set-output name=branch::${branchName}`);
+              shell: node
+            - name: Create new branch
+              run: |
                   git config user.name 'github-actions[bot]'
                   git config user.email 'github-actions[bot]@users.noreply.github.com'
-                  git checkout -b ${LABEL_NAME}-${{ github.event.issue.number }}
-                  git push origin ${LABEL_NAME}-${{ github.event.issue.number }}
+                  git checkout -b ${{ steps.branch_name.outputs.branch }}-${{ github.event.issue.number }}
+                  git push origin ${{ steps.branch_name.outputs.branch }}-${{ github.event.issue.number }}
