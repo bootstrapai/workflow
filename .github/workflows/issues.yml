@@ -1,0 +1,40 @@
+name: Create branch on new issue
+on:
+    issues:
+        types: [opened, labeled]
+
+jobs:
+    create_branch:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+            - name: Get branch name from labels
+              id: branch_name
+              uses: actions/github-script@v5
+              with:
+                  script: |
+                      try {
+                          const labels = github.context.issue.labels;
+                          let branchName = "issue";
+
+                          if (labels.includes("bug")) {
+                              branchName = "bug";
+                          } else if (labels.includes("enhancement")) {
+                              branchName = "enhancement";
+                          } else if (labels.includes("documentation")) {
+                              branchName = "documentation";
+                          }
+
+                          core.setOutput("branch-name", branchName);
+                      } catch (error) {
+                          core.setFailed(error.message);
+                      }
+            - name: Create new branch
+              run: |
+                  git config user.name 'github-actions[bot]'
+                  git config user.email 'github-actions[bot]@users.noreply.github.com'
+                  git checkout -b ${{ steps.branch_name.outputs.branch-name }}-${{ github.event.issue.number }}
+                  git push origin ${{ steps.branch_name.outputs.branch-name }}-${{ github.event.issue.number }}
