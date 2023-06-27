@@ -1,6 +1,6 @@
 {
     "name": "@bootstrapai/workflow",
-    "version": "0.0.0-development",
+    "version": "0.1.0-development",
     "description": "",
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
