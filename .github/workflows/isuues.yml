@@ -1,0 +1,31 @@
+name: Create branch on new issue
+on:
+    issues:
+        types: [opened, labeled]
+
+jobs:
+    create_branch:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out repository code
+              uses: actions/checkout@v2
+            - name: Create new branch
+              id: createbranch
+              run: |
+                  LABEL_NAME=""
+                  if contains(github.event.issue.labels.*.name, 'bug')
+                  then
+                    LABEL_NAME='bug'
+                  elif contains(github.event.issue.labels.*.name, 'enhancement')
+                  then
+                    LABEL_NAME='enhancement'
+                  elif contains(github.event.issue.labels.*.name, 'documentation')
+                  then
+                    LABEL_NAME='documentation'
+                  else
+                    LABEL_NAME='issue'
+                  fi
+                  git config user.name 'github-actions[bot]'
+                  git config user.email 'github-actions[bot]@users.noreply.github.com'
+                  git checkout -b ${LABEL_NAME}-${{ github.event.issue.number }}
+                  git push origin ${LABEL_NAME}-${{ github.event.issue.number }}
